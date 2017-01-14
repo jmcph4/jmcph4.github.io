@@ -6,9 +6,59 @@
 </description>
     <link>https://jmcph4.github.io/</link>
     <atom:link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 14 Jan 2017 03:25:36 +0000</pubDate>
-    <lastBuildDate>Sat, 14 Jan 2017 03:25:36 +0000</lastBuildDate>
+    <pubDate>Sat, 14 Jan 2017 04:50:53 +0000</pubDate>
+    <lastBuildDate>Sat, 14 Jan 2017 04:50:53 +0000</lastBuildDate>
     <generator>Jekyll v2.5.1</generator>
+    
+      <item>
+        <title>A Model For ADTs</title>
+        <description>&lt;p&gt;For the past month or so I have concerned myself with the study of Abstract Data Types (ADTs), particularly the precise, abstract mathematical definition of them. This post reflects the current culmination of my efforts.&lt;/p&gt;
+
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Abstract Data Types (ADTs) are mathematical objects somewhat congruent to algebraic structures in pure mathematics. We have a set of operations we can perform on a given ADT and a set of values it may take.&lt;/p&gt;
+
+&lt;p&gt;For the purposes of my analysis, an axiom I have adopted is that &lt;b&gt;no ADT can be perfectly implemented in any computer programming language&lt;/b&gt;. This is due to the inherent nature of real computers: i.e., they are error-prone. ADTs, like any mathematical objects, do not suffer from &quot;errors&quot; (imagine taking the logarithm of a negative number and the universe raising an exception).&lt;/p&gt;
+
+&lt;p&gt;Despite this seemingly pessimistic outlook, we can implement ADTs effectively and quite closely to their mathematical definitions. Firstly, we require some way to understand and reason about ADTs in general. We require a &lt;b&gt;specification&lt;/b&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Specification of ADTs&lt;/h2&gt;
+&lt;p&gt;Above, I claimed that the formal mathematical definition of an ADT is a set of operations and a set of possible values, this is not as pragmatic as I would like. It is at this point that I started to devise a strategy for specifying ADTs in a more useful sense. We define the following characteristics of any general ADT:&lt;/p&gt;
+
+&lt;ul&gt;
+    &lt;li&gt;&lt;p&gt;Operations&lt;/p&gt;&lt;/li&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;p&gt;Unary&lt;/p&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;p&gt;Binary&lt;/p&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+    &lt;li&gt;&lt;p&gt;Access&lt;/p&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;p&gt;Size&lt;/p&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;p&gt;Equality&lt;sup&gt;&amp;#10013;&lt;/sup&gt;&lt;/p&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;p&gt;Membership&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These are charactertistics of all ADTs, not merely specific ones. Examples of such specifications are available as a &lt;a href=&quot;https://gist.github.com/jmcph4/683238e6236ed0b5f90457f7eb8c767a&quot; target=&quot;_blank&quot; title=&quot;jmcph4/adt.md&quot;&gt;Gist&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2&gt;Hierarchy of ADTs&lt;/h2&gt;
+&lt;p&gt;It is well known that some ADTs are special cases of other, more general, ADTs. For instance, a binary tree is an ADT that is a special case of the (more general) tree ADT (also referred to as a \(k\)-ary tree with \(k=2\)). This becomes quite evident when specifying ADTs, as one finds themselves repeating themselves more and more. This is the motivation behind my ADT graph (not the ADT &lt;b&gt;called&lt;/b&gt; a graph, but a graph &lt;b&gt;of&lt;/b&gt; ADTs).&lt;/p&gt;
+
+&lt;p&gt;Let us define a directed graph, \(G\), whose vertices are ADTs. An edge in \(G\) from a vertex \(u\) to a vertex \(v\) denotes that the ADT represented by \(v\) is a special case of the ADT represented by \(u\).&lt;/p&gt;
+
+&lt;img src=&quot;https://gist.githubusercontent.com/jmcph4/3a429b9478e9bdd7ed25cb3b6aa07acf/raw/bdf21f776de04cb54dea4d921a58a04b01e1f51e/ADT_graph_image.PNG&quot; /&gt;
+
+&lt;p&gt;In some sense, the &quot;most important&quot; ADTs in \(G\) are those \(v\in G\) such that \(deg^{+}(v)=0\), as these are the ADTs which are the most general and thus all other ADTs can be derived. We will call the set of all such ADTs the set of &lt;i&gt;base ADTs&lt;/i&gt;. In the current model, this set is: $$\{List, Hypergraph, Stack, Queue, Multimap, Multiset\}$$&lt;/p&gt;
+
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The description of the model I have given here is by no means complete. For example, the ADT graph does not have every ADT in existence in it (nor can it, in practice). Despite this incompleteness, I hope that I have provided sufficient description to enable the model to be well-understood and useful. Of course, I am open to change and growth of the model.&lt;/p&gt;
+
+&lt;hr&gt;
+&lt;p&gt;&lt;sup&gt;&amp;#10013;&lt;/sup&gt;By &quot;equality&quot;, I mean mathematical equality. In a concrete implementation, this is actually closer to isomorphism, as in computer programming, two things are &quot;equal&quot; when they are in fact the same thing.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 14 Jan 2017 00:00:00 +0000</pubDate>
+        <link>https://jmcph4.github.io/2017/01/14/a-model-for-adts/</link>
+        <guid isPermaLink="true">https://jmcph4.github.io/2017/01/14/a-model-for-adts/</guid>
+        
+        
+      </item>
     
   </channel>
 </rss>
