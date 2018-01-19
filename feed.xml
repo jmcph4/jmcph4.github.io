@@ -6,9 +6,290 @@
 </description>
     <link>https://jmcph4.github.io/</link>
     <atom:link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 27 May 2017 03:08:54 +0000</pubDate>
-    <lastBuildDate>Sat, 27 May 2017 03:08:54 +0000</lastBuildDate>
+    <pubDate>Fri, 19 Jan 2018 02:31:37 +0000</pubDate>
+    <lastBuildDate>Fri, 19 Jan 2018 02:31:37 +0000</lastBuildDate>
     <generator>Jekyll v2.5.1</generator>
+    
+      <item>
+        <title>Writing a Simple Fuzzer in Python</title>
+        <description>&lt;p&gt;I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we&#39;ll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written.&lt;/p&gt;
+
+&lt;section id=&quot;s1&quot;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Firslty, we need to grab our dependencies. For this tutorial, we&#39;ll be using two projects of mine: &lt;a href=&quot;https://github.com/jmcph4/mph&quot; title=&quot;&quot; target=&quot;_blank&quot;&gt;MPH&lt;/a&gt; and &lt;a href=&quot;https://github.com/jmcph4/fuzzbang&quot; title=&quot;&quot; target=&quot;_blank&quot;&gt;Fuzzbang&lt;/a&gt; (these will be discussed later in the tutorial):&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; git clone https://github.com/jmcph4/mph.git
+$&gt; git clone https://github.com/jmcph4/fuzzbang.git
+&lt;/pre&gt;
+
+&lt;p&gt;Secondly, create a directory for our project and &lt;code&gt;cd&lt;/code&gt; into it:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; mkdir fuzztut
+$&gt; cd fuzztut
+&lt;/pre&gt;
+
+&lt;p&gt;Thirdly, copy the actual Python packages into our project directory:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; cp ../mph/mph mph -r
+$&gt; cp ../fuzzbang/fuzzbang fuzzbang -r
+&lt;/pre&gt;
+
+&lt;p&gt;Our project directory should now look like this:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; ls
+fuzzbang mph
+&lt;/pre&gt;
+
+&lt;p&gt;We&#39;re now ready to commence development!&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s2&quot;&gt;
+&lt;h2&gt;The Target&lt;/h2&gt;
+&lt;p&gt;While both of the main packages this post centres around are designed to be as generic and adaptable as possible, a concrete example is often easier to learn with. So, let&#39;s create our fuzzing target, &lt;code&gt;name&lt;/code&gt;:&lt;/p&gt;
+
+&lt;script src=&quot;https://gist.github.com/jmcph4/95c3220ae04e9dea3ece19b0cb4285d0.js&quot;&gt;&lt;/script&gt;
+
+&lt;p&gt;All &lt;code&gt;name&lt;/code&gt; does is prompts the user for their name via &lt;code&gt;stdout&lt;/code&gt;, then accepts an &lt;b&gt;arbitrarily long&lt;/b&gt; input from the user on &lt;code&gt;stdin&lt;/code&gt;, and finally greets the user on &lt;code&gt;stdout&lt;/code&gt; with their supplied name. This is a textbook example of a &lt;a href=&quot;https://en.wikipedia.org/wiki/Buffer_overflow&quot; target=&quot;_blank&quot; title=&quot;Buffer overflow - Wikipedia&quot;&gt;buffer overflow&lt;/a&gt; (those familiar with the concept probably already saw this). To compile &lt;code&gt;name&lt;/code&gt;, simply run:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; gcc name.c -Wall -Wextra -Wshadow -pedantic -std=c11 -g3 -o name
+&lt;/pre&gt;
+
+&lt;p&gt;Our project now looks like this:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; ls
+fuzzbang mph name.c name
+&lt;/pre&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s3&quot;&gt;
+&lt;h2&gt;Talking to the Target&lt;/h2&gt;
+&lt;p&gt;Now that we have our target program, we need some way to talk to it from our Python code. Python 3 has the &lt;code&gt;subprocess&lt;/code&gt; module for this reason, but we will use a simple wrapper around it: MPH. MPH is a simple Python package which essentially just wraps the parts of &lt;code&gt;subprocess&lt;/code&gt; relevant for our purposes. MPH allows a Python programmer to execute a program with various inputs and capture the output (not just &lt;code&gt;stdout&lt;/code&gt; and &lt;code&gt;stderr&lt;/code&gt;, but also the return code and any signals received). From the example in the &lt;a href=&quot;https://github.com/jmcph4/mph/blob/8fa42aebc92e864c6832009aa0c124b3b9b3e0b8/README.md&quot; title=&quot;mph/README.md at 8fa42aebc92e864c6832009aa0c124b3b9b3e0b8 · jmcph4/mph · GitHub&quot; target=&quot;_blank&quot;&gt;MPH README&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;
+from mph import program
+
+prog = program.Program(&quot;/path/to/myprog&quot;, [])   # initialise program
+prog.append_string_stdin(&quot;Hello, world!&quot;)       # write to stdin
+prog.exec()                                     # run program
+
+# check return value of guest executable
+if prog.retval == 0:
+    print(prog.stdout)
+else:
+    print(&quot;Inferior returned with return code &quot; + str(prog.retval) + &quot;\n&quot;)
+&lt;/pre&gt;
+
+&lt;p&gt;In this example, the string &lt;code&gt;&quot;Hello, world!&quot;&lt;/code&gt; could be replaced with any arbitrary string (insertion of arbitrary &lt;i&gt;binary&lt;/i&gt; data is available via &lt;code&gt;Program.append_stdin&lt;/code&gt;).&lt;/p&gt;
+
+&lt;p&gt;Let&#39;s start writing our fuzzer in Python. Create a file called &lt;code&gt;fuzztut.py&lt;/code&gt; and use your preferred editor to open it. We&#39;ll start off by writing a function that sends a string to &lt;code&gt;name&lt;/code&gt; and then executes it:&lt;/p&gt;
+
+&lt;pre&gt;
+import sys
+from mph.program import Program
+from fuzzbang.alphanumericfuzzer import AlphaNumericFuzzer
+
+PATH_TO_NAME = &quot;&quot; # fill this in yourself
+
+def run(string):
+    &quot;&quot;&quot;
+    Sends the provided string to the `name` program and runs it with that
+    input. Returns the return value `name` gives us
+    &quot;&quot;&quot;
+    prog = Program(PATH_TO_NAME, [])
+    prog.append_string_stdin(string)
+    prog.exec()
+    
+    return prog.retval
+&lt;/pre&gt;
+
+&lt;p&gt;Note that you will need to provide an &lt;b&gt;absolute&lt;/b&gt; path to &lt;code&gt;name&lt;/code&gt; on line 5. For example, my version of line 5 would look like:&lt;/p&gt;
+
+&lt;pre&gt;PATH_TO_NAME = &quot;/home/jack/dev/fuzztut/name&quot; # fill this in yourself&lt;/pre&gt;
+
+&lt;p&gt;Our project now looks like this:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; ls
+fuzzbang fuzztut.py mph name name.c 
+&lt;/pre&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s4&quot;&gt;
+&lt;h2&gt;Generating Test Data&lt;/h2&gt;
+&lt;p&gt;At this point, we can send strings to &lt;code&gt;name&lt;/code&gt;, run it, and see what the result was. This alone is just a convoluted way of running programs - what we need is a way to generate meaningful test data to give to &lt;code&gt;name&lt;/code&gt;. For this, we&#39;ll use Fuzzbang. Fuzzbang is a Python 3 package providing a framework for producing fuzzing data. Consulting the &lt;a href=&quot;https://github.com/jmcph4/fuzzbang/blob/31ebf5173abc4b03dd6ccd0a5d2a7466ea92d915/README.md&quot; target=&quot;_blank&quot; title=&quot;fuzzbang/README.md at 31ebf5173abc4b03dd6ccd0a5d2a7466ea92d915 · jmcph4/fuzzbang · GitHub&quot;&gt;README&lt;/a&gt;:&lt;/p&gt;
+
+&lt;pre&gt;
+from fuzzbang.alphanumericfuzzer import AlphaNumericFuzzer
+
+N = 10 # number of test cases
+
+# bounds on length of alphanumeric strings
+MIN_LEN = 0
+MAX_LEN = 8
+
+f = AlphaNumericFuzzer(MIN_LEN, MAX_LEN) # fuzzer object
+
+# generate test cases
+for i in range(N):
+    data = f.generate() # generate string
+    print(&quot;(&quot; + str(len(data)) + &quot;)&quot;) # print length of string
+    print(data) # print string itself
+&lt;/pre&gt;
+
+&lt;p&gt;Let&#39;s now write a function that generates an alphanumeric string of a certain maximum length. It should be noted at this point that there is no special reason to use just alphanumeric strings - arbitrary binary data could be used (and could potentially even expose further, more subtle vulnerabilities in programs). We&#39;ll use alphanumeric input out of simplicity. In &lt;code&gt;fuzztut.py&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;
+def generate_input(n):
+    &quot;&quot;&quot;
+    Returns an alphanumeric string with a length no greater than n.
+    &quot;&quot;&quot;
+    fuzzer = AlphaNumericFuzzer(0, n)
+    
+    return fuzzer.generate()
+&lt;/pre&gt;
+
+&lt;p&gt;A few examples of how you might call &lt;code&gt;generate_input&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;
+generate_input(0) # (empty string)
+generate_input(1) # q
+generate_input(1) # T
+generate_input(1) # o
+generate_input(8) # rCyJblUl
+generate_input(8) # (empty string)
+generate_input(8) # M9R
+&lt;/pre&gt;
+
+&lt;p&gt;These are some examples taken from actual calls to the function on my local machine. Calls are repeated to demonstrate the pseudorandom nature of the output. Note that some calls to &lt;code&gt;generate_input(8)&lt;/code&gt; returned strings &lt;i&gt;less&lt;/i&gt; than eight characters long.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s5&quot;&gt;
+&lt;h2&gt;Implementing the Main Program&lt;/h2&gt;
+&lt;p&gt;We now have a way of interacting with &lt;code&gt;name&lt;/code&gt; (&lt;code&gt;run&lt;/code&gt;) and a way of generating (pseudo)random inputs for &lt;code&gt;name&lt;/code&gt; (&lt;code&gt;generate_input&lt;/code&gt;). All we need now is some code to drive the actual fuzzing process by bringing the two together.&lt;/p&gt;
+
+&lt;pre&gt;
+if _name__ == &quot;__main__&quot;:
+    # usage
+    if len(sys.argv) != 3:
+        print(&quot;usage: python3 fuzztut.py num_cases max_length&quot;)
+        exit(1)
+        
+    # command-line arguments    
+    num_cases = int(sys.argv[1]) # number of test cases to run
+    max_length = int(sys.argv[2]) # maximum length of each string
+       
+    results = [] # list for storing the result of each test
+    
+    # main loop
+    for i in range(num_cases):
+        input = generate_input() # generate input string
+        return_value = run(input) # run name with our input
+        
+        # save test results to our global results list
+        test_result = {}
+        test_result[&quot;num&quot;] = i
+        test_result[&quot;input&quot;] = input
+        test_result[&quot;output&quot;] = return_value
+        results.append(test_result)
+
+    # print summary
+    for test in results:
+        print(&quot;Case #{:d}:&quot;.format(test[&quot;num&quot;]))
+        print(&quot;    IN: &quot; + test[&quot;input&quot;])
+        print(&quot;    OUT: {:4d}&quot;.format(test[&quot;output&quot;]))
+        print(&quot;\n&quot;)
+&lt;/pre&gt;
+
+&lt;p&gt;Using our fuzzer is simple:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; python3 fuzztut.py
+usage: python3 fuzztut.py num_cases max_length
+&lt;/pre&gt;
+
+&lt;p&gt;For example,&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; python3 fuzztut.py 10 8
+
+&lt;/pre&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s6&quot;&gt;
+&lt;h2&gt;Fuzzing the Target&lt;/h2&gt;
+&lt;p&gt;Now that our fuzzer works, we can focus on fuzzing &lt;code&gt;name&lt;/code&gt; rather than writing the fuzzer. Recall that &lt;code&gt;name&lt;/code&gt; allocates a buffer of fixed size, yet accepts arbitrarily long input. Studying the code for &lt;code&gt;name&lt;/code&gt;, it&#39;s &lt;a href=&quot;https://gist.github.com/jmcph4/95c3220ae04e9dea3ece19b0cb4285d0#file-name-c-L4&quot; target=&quot;_blank&quot; title=&quot;Simple toy program in C that greets the user with their desired name (fuzzing target) · GitHub&quot;&gt;obvious&lt;/a&gt; that the buffer is 16 characters long. With this in mind, it makes sense that inputs longer than 16 characters are likely to cause issues. Let&#39;s try it:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; python3 fuzztut.py 10 32
+Case #0:
+    IN: wgZ0S7rF08
+    OUT:    0
+Case #1:
+    IN: y6tLHoJ2u4LRs158aAIlrHsVOHT
+    OUT:  -11
+Case #2:
+    IN: X0Ji7b5Z4TgYLYRpC0RAE740Xk
+    OUT:  -11
+Case #3:
+    IN: 6sOweDnPfmZdIxLiKm
+    OUT:    0
+Case #4:
+    IN: LTU
+    OUT:    0
+Case #5:
+    IN: XlAOQtgptB
+    OUT:    0
+Case #6:
+    IN: rYAi73kaZnwY
+    OUT:    0
+Case #7:
+    IN: B3LOMahprORnA69ROD9yI49OP
+    OUT:   -7
+Case #8:
+    IN: 6Tyrvvn0IK2GeURZoElR
+    OUT:    0
+Case #9:
+    IN: TZjgYFR
+    OUT:    0
+&lt;/pre&gt;
+
+&lt;p&gt;Notice that &lt;code&gt;name&lt;/code&gt; returned -11 on inputs 26-27 characters long, and -7 on an input 25 characters long. Let&#39;s see what happens if we execute &lt;code&gt;name&lt;/code&gt; ourselves with the same inputs:&lt;/p&gt;
+
+&lt;pre&gt;
+$&gt; ./name
+What&#39;s your name? y6tLHoJ2u4LRs158aAIlrHsVOHT
+Hi there, y6tLHoJ2u4LRs158aAIlrHsVOHT!
+Segmentation fault
+$&gt; ./name
+What&#39;s your name? B3LOMahprORnA69ROD9yI49OP
+Hi there, B3LOMahprORnA69ROD9yI49OP!
+Bus error
+&lt;/pre&gt;
+
+&lt;p&gt;Our fuzzer has revealed multiple inputs that cause &lt;code&gt;name&lt;/code&gt; to reliably crash!&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s7&quot;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;The bugs we found in the previous section warrant further investigation; however, actually &lt;i&gt;fixing&lt;/i&gt; the bugs in &lt;code&gt;name&lt;/code&gt; is outside the scope of this tutorial. These bugs will be addressed and explained in another post.&lt;/p&gt;
+
+&lt;p&gt;In summary, we used two small, very simple Python packages to write a (very simple) fuzzer to help us diagnose issues in a program we wrote. While &lt;code&gt;name&lt;/code&gt; is only a toy program (with an intentional vulnerability), most of what we did in this tutorial - including the code we wrote - can be easily abstracted to any general binary executable. Both MPH and Fuzzbang provide facilities for doing so.&lt;/p&gt;
+
+&lt;p&gt;The complete code for &lt;code&gt;fuzztut.py&lt;/code&gt; is available as a Gist &lt;a href=&quot;https://gist.github.com/jmcph4/51b0884c8cca76b879d364a33f8da934&quot; target=&quot;_blank&quot; title=&quot;Full, working code for Writing a Simple Fuzzer in Python at https://jmcph4.github.com/2018/01/19/writing-a-simple-fuzzer-in-python&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;/section&gt;
+</description>
+        <pubDate>Fri, 19 Jan 2018 00:00:00 +0000</pubDate>
+        <link>https://jmcph4.github.io/2018/01/19/writing-a-simple-fuzzer-in-python/</link>
+        <guid isPermaLink="true">https://jmcph4.github.io/2018/01/19/writing-a-simple-fuzzer-in-python/</guid>
+        
+        
+      </item>
     
       <item>
         <title>A Model For ADTs</title>
