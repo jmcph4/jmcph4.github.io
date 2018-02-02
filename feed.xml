@@ -6,9 +6,167 @@
 </description>
     <link>https://jmcph4.github.io/</link>
     <atom:link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 19 Jan 2018 02:31:37 +0000</pubDate>
-    <lastBuildDate>Fri, 19 Jan 2018 02:31:37 +0000</lastBuildDate>
+    <pubDate>Fri, 02 Feb 2018 01:01:43 +0000</pubDate>
+    <lastBuildDate>Fri, 02 Feb 2018 01:01:43 +0000</lastBuildDate>
     <generator>Jekyll v2.5.1</generator>
+    
+      <item>
+        <title>Identifying Loops While Reverse Engineering</title>
+        <description>&lt;section id=&quot;s1&quot;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Often when reverse engineering a binary, it&#39;s useful to have some patterns to help identify higher-level code constructs. This post goes through the general structure of various loops in a higher-level language (C) and their corresponding assembly format.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s2&quot;&gt;
+&lt;h2&gt;&lt;code&gt;for&lt;/code&gt; Loops&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;for&lt;/code&gt; loops are probably the most common loop in use today. As you&#39;re probably aware, &lt;code&gt;for&lt;/code&gt; loops are normally used to generate a sequence or to iterate over some container. They look like this:&lt;/p&gt;
+
+&lt;pre&gt;
+for(i=A;i&amp;lt;B;i+=C)
+{
+    /* ... */
+}
+&lt;/pre&gt;
+
+&lt;p&gt;Admittedly, &lt;code&gt;for&lt;/code&gt; loops usually just increment their loop counter, but we can be even more general. The corresponding machine code for this code snippet would look something like this:&lt;/p&gt;
+
+&lt;pre&gt;
+mov dword [rbp - 4], A
+jmp 5
+; ...
+add dword [rbp - 4], C
+cmp dword [rbp - 4], B-1
+jbe 1
+&lt;/pre&gt;
+
+&lt;p&gt;For the snippet above, I&#39;ve used line numbers for the jumps on lines 2 and 6, but in practice they would be the corresponding addresses in memory for these instructions.&lt;/p&gt;
+
+&lt;p&gt;Let&#39;s look at a concrete example. Consider the following C program:&lt;/p&gt;
+
+&lt;pre&gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+
+int main(void)
+{
+    for(unsigned int i=0;i&amp;lt;3;i++)
+    {
+        printf(&quot;%d&quot;, i);
+    }
+    
+    return EXIT_SUCCESS;
+}
+&lt;/pre&gt;
+
+&lt;p&gt;I&#39;m using my 64-bit Debian machine, so I&#39;ve included my &lt;code&gt;uname&lt;/code&gt; output for reference. I&#39;m compiling using GCC and using &lt;code&gt;objdump&lt;/code&gt; to get the disassembly of our executable.&lt;/p&gt;
+
+&lt;pre&gt;
+$ uname --all
+Linux devlaptop 4.9.0-4-amd64 #1 SMP Debian 4.9.65-3+deb9u1 (2017-12-23) x86_64 GNU/Linux
+$ gcc for.c -Wall -Wextra -Wshadow -pedantic -std=c11 -o for
+$ objdump -d -Mintel for
+&lt;/pre&gt;
+
+&lt;p&gt;Let&#39;s just look at the disassembly of &lt;code&gt;main&lt;/code&gt; (I&#39;ve included my own comments on relevant lines):&lt;/p&gt;
+
+&lt;pre&gt;
+00000000000006b0 &lt;main&gt;:
+ 6b0:   55                      push   rbp
+ 6b1:   48 89 e5                mov    rbp,rsp
+ 6b4:   48 83 ec 10             sub    rsp,0x10
+ 6b8:   c7 45 fc 00 00 00 00    mov    DWORD PTR [rbp-0x4],0x0                                      ; initialise loop counter to zero
+ 6bf:   eb 1a                   jmp    6db &amp;lt;main+0x2b&amp;gt;                                        ; jump to loop condition check
+ 6c1:   8b 45 fc                mov    eax,DWORD PTR [rbp-0x4]
+ 6c4:   89 c6                   mov    esi,eax
+ 6c6:   48 8d 3d a7 00 00 00    lea    rdi,[rip+0xa7]        # 774 &lt;_IO_stdin_used+0x4&gt;
+ 6cd:   b8 00 00 00 00          mov    eax,0x0
+ 6d2:   e8 89 fe ff ff          call   560 &lt;printf@plt&gt;
+ 6d7:   83 45 fc 01             add    DWORD PTR [rbp-0x4],0x1                                      ; increment loop counter by 1
+ 6db:   83 7d fc 03             cmp    DWORD PTR [rbp-0x4],0x2                                      ; check if loop counter has reached 2 (terminating condition)
+ 6df:   76 e0                   jbe    6c1 &amp;lt;main+0x11&amp;gt;                                        ; jump based on the result of this comparison
+ 6e1:   b8 00 00 00 00          mov    eax,0x0
+ 6e6:   c9                      leave  
+ 6e7:   c3                      ret    
+ 6e8:   0f 1f 84 00 00 00 00    nop    DWORD PTR [rax+rax*1+0x0]
+ 6ef:   00
+&lt;/pre&gt;
+
+&lt;p&gt;The first three instructions are the function prologue for &lt;code&gt;main&lt;/code&gt;. The fourth instruction initialises our loop counter variable (&lt;code&gt;i&lt;/code&gt;) to zero, and the fifth instruction performs a jump to our loop condition check (the 12&lt;sup&gt;th&lt;/sup&gt; instruction). The code at 0x6c1-0x0x6d2 simply sets up the parameters to &lt;code&gt;printf&lt;/code&gt; and calls it. At 0x6d7 our loop counter is incremented (in our case, by one). The next instruction after that checks whether our loop counter has reached 2 yet and the instruction after &lt;i&gt;that&lt;/i&gt; jumps based off of the result of this comparison.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s3&quot;&gt;
+&lt;h2&gt;&lt;code&gt;while&lt;/code&gt; Loops&lt;/h2&gt;
+
+&lt;p&gt;What about &lt;code&gt;while&lt;/code&gt; loops? The analagous &lt;code&gt;while&lt;/code&gt; loop version of our &lt;code&gt;for&lt;/code&gt; loop template above looks like this:&lt;/p&gt;
+
+&lt;pre&gt;
+i = A;
+while(i &lt; B)
+{
+    /* ... */
+    i += C;
+}
+&lt;/pre&gt;
+
+If we rewrite our toy program (in &lt;code&gt;for.c&lt;/code&gt;) to use a &lt;code&gt;while&lt;/code&gt; loop instead of a &lt;code&gt;for&lt;/code&gt; loop and recompile, we can check the resultant machine code in the same way we did previously.
+
+&lt;pre&gt;
+#include &amp;lt;stdio.h&amp;gt;
+#include &amp;lt;stdlib.h&amp;gt;
+
+int main(void)
+{
+    unsigned int i = 0;
+    
+    while(i &amp;lt; 3)
+    {
+        printf(&quot;%d&quot;, i);
+    }
+
+    return EXIT_SUCCESS;
+}
+&lt;/pre&gt;
+
+&lt;p&gt;Our resulting disassembly is as follows:&lt;/p&gt;
+
+&lt;pre&gt;
+00000000000006b0 &amp;lt;main&amp;gt;:
+ 6b0:   55                      push   rbp
+ 6b1:   48 89 e5                mov    rbp,rsp
+ 6b4:   48 83 ec 10             sub    rsp,0x10
+ 6b8:   c7 45 fc 00 00 00 00    mov    DWORD PTR [rbp-0x4],0x0
+ 6bf:   eb 1a                   jmp    6db &amp;lt;main+0x2b&amp;gt;
+ 6c1:   8b 45 fc                mov    eax,DWORD PTR [rbp-0x4]
+ 6c4:   89 c6                   mov    esi,eax
+ 6c6:   48 8d 3d a7 00 00 00    lea    rdi,[rip+0xa7]        # 774 &amp;lt;_IO_stdin_used+0x4&amp;gt;
+ 6cd:   b8 00 00 00 00          mov    eax,0x0
+ 6d2:   e8 89 fe ff ff          call   560 &lt;printf@plt&gt;
+ 6d7:   83 45 fc 01             add    DWORD PTR [rbp-0x4],0x1
+ 6db:   83 7d fc 03             cmp    DWORD PTR [rbp-0x4],0x3
+ 6df:   76 e0                   jbe    6c1 &amp;lt;main+0x11&amp;gt;
+ 6e1:   b8 00 00 00 00          mov    eax,0x0
+ 6e6:   c9                      leave  
+ 6e7:   c3                      ret    
+ 6e8:   0f 1f 84 00 00 00 00    nop    DWORD PTR [rax+rax*1+0x0]
+ 6ef:   00
+&lt;/pre&gt;
+
+&lt;p&gt;Exactly the same! Even &lt;code&gt;diff&lt;/code&gt; agrees.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s4&quot;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Ultimately, both types of loops essentially boil down to jumping, comparing, and jumping based on the comparison (after all, that&#39;s what &lt;i&gt;looping&lt;/i&gt; is). While these patterns aren&#39;t hard to spot by hand, tools such as radare2 provide helpful ASCII art arrows or other visual aids to show control flow in general, not just for loops. As I myself am still new to reverse engineering, I find it helpful to have such patterns in mind to help provide structure to what can seem like an endless pool of machine code.&lt;/p&gt;
+
+&lt;p&gt;If this article was interesting to you and you&#39;d like to apply these techniques to some more complicated binaries, check out &lt;a href=&quot;https://github.com/jmcph4/crackerjack&quot; target=&quot;_blank&quot; title=&quot;jmcph4/crackerjack: A collection of crackmes&quot;&gt;this project&lt;/a&gt; of mine.&lt;/p&gt;
+&lt;/section&gt;
+</description>
+        <pubDate>Fri, 02 Feb 2018 00:00:00 +0000</pubDate>
+        <link>https://jmcph4.github.io/2018/02/02/identifying-loops-while-reverse-engineering/</link>
+        <guid isPermaLink="true">https://jmcph4.github.io/2018/02/02/identifying-loops-while-reverse-engineering/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Writing a Simple Fuzzer in Python</title>
