@@ -6,9 +6,170 @@
 </description>
     <link>https://jmcph4.github.io/</link>
     <atom:link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 07 Feb 2018 09:25:20 +0000</pubDate>
-    <lastBuildDate>Wed, 07 Feb 2018 09:25:20 +0000</lastBuildDate>
+    <pubDate>Wed, 07 Feb 2018 09:28:10 +0000</pubDate>
+    <lastBuildDate>Wed, 07 Feb 2018 09:28:10 +0000</lastBuildDate>
     <generator>Jekyll v2.5.1</generator>
+    
+      <item>
+        <title>Crackerjack - Introduction and Puzzle A Solution</title>
+        <description>&lt;section id=&quot;s1&quot;&gt;
+&lt;h2&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;As part of my journey into reverse engineering, I decided to create my own set of &lt;a href=&quot;https://en.wikipedia.org/wiki/Crackme&quot; target=&quot;_blank&quot; title=&quot;Crackme - Wikipedia&quot;&gt;&quot;crackmes&quot;&lt;/a&gt; called &lt;a href=&quot;https://github.com/jmcph4/crackerjack&quot; target=&quot;_blank&quot; title=&quot;GitHub - jmcph4/crackerjack: A collection of crackmes&quot;&gt;Crackerjack&lt;/a&gt;. I will be doing a series of articles detailing solutions to each puzzle, predominantly using radare2 and Unix utilities.&lt;/p&gt;
+
+&lt;p&gt;While Crackerjack is still a work in progress, each puzzle is standalone. Thus, once one is committed, it means it is ready to be solved. Each puzzle in Crackerjack accepts some arbitrary input on &lt;code&gt;stdin&lt;/code&gt;, compares it against the passphrase for that puzzle, and outputs either &lt;kbd&gt;PASS&lt;/kbd&gt; or &lt;kbd&gt;FAIL&lt;/kbd&gt;. The aim of the game is to determine each passphrase (yes, I know them all, and you can too if you study the source code). In this post, I will walkthrough the solution of the first puzzle, Puzzle A. Be warned, it is &lt;i&gt;very&lt;/i&gt; easy (at least when it comes to crackmes).&lt;/p&gt;
+
+&lt;p&gt;To acquire the binaries, get a local copy of the Git repository, compile, and strip the binaries:&lt;/p&gt;
+
+&lt;pre&gt;
+$ git clone https://github.com/jmcph4/crackerjack.git
+$ cd crackerjack
+$ make
+$ strip bin/*
+&lt;/pre&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s2&quot;&gt;
+&lt;h2&gt;Puzzle A&lt;/h2&gt;
+&lt;p&gt;The first puzzle is in &lt;code&gt;bin/a&lt;/code&gt;. When I first start reverse engineering a program, I like to use it myself for a bit in order to get some intuition as to how the program works. Try running the puzzle binary and trying some different passphrases (who knows, you might get lucky).&lt;/p&gt;
+
+As mentioned above, due to this puzzle being the first in the collection it is not meant to be difficult (and is quite the opposite). With this in mind, we can expect to be exploiting some rather low-hanging fruit. Open the puzzle binary in radare2 and use the &lt;kbd&gt;iz&lt;/kbd&gt; command to display a list of all ASCII strings radare2 could find in the binary:&lt;/p&gt;
+
+&lt;pre&gt;
+$ r2 bin/a
+[0x00000630]&gt; iz
+vaddr=0x00000847 paddr=0x00000847 ordinal=000 sz=7 len=6 section=.rodata type=ascii string=trance
+vaddr=0x0000084e paddr=0x0000084e ordinal=001 sz=5 len=4 section=.rodata type=ascii string=PASS
+vaddr=0x00000853 paddr=0x00000853 ordinal=002 sz=5 len=4 section=.rodata type=ascii string=FAIL
+&lt;/pre&gt;
+
+&lt;p&gt;Of course, your output will differ slightly from mine (e.g. the PID used, etc.); however, the key aspects remain the same. Our listing contains three different strings:&lt;/p&gt;
+
+&lt;p&gt;
+&lt;ol&gt;
+    &lt;li&gt;&lt;kbd&gt;trance&lt;/kbd&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;kbd&gt;PASS&lt;/kbd&gt;&lt;/li&gt;
+    &lt;li&gt;&lt;kbd&gt;FAIL&lt;/kbd&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/p&gt;
+
+&lt;p&gt;Well, we know that every puzzle in Crackerjack outputs either &lt;kbd&gt;PASS&lt;/kbd&gt; or &lt;kbd&gt;FAIL&lt;/kbd&gt; depending on our passphrase, so the last two strings are easily accounted for. The first string, &lt;kbd&gt;trance&lt;/kbd&gt;, looks very out of place. If we attempt this as our passphrase:&lt;/p&gt;
+
+&lt;pre&gt;
+$ ./bin/a
+trance
+PASS
+&lt;/pre&gt;
+
+&lt;p&gt;Success! We have successfully solved the first puzzle binary, using &lt;i&gt;very&lt;/i&gt; simple techniques.&lt;/p&gt;
+
+&lt;p&gt;We used radare2 to display all of the ASCII strings contained within the puzzle binary and made an educated guess as to what the passphrase was. Note that we did not really need radare2 for this (but it did make it rather nice to digest). Unix has a nice utility called &lt;code&gt;strings&lt;/code&gt;, which lists &lt;i&gt;printable&lt;/i&gt; ASCII strings in &lt;i&gt;any arbitrary file&lt;/i&gt;.&lt;/p&gt;
+
+&lt;pre&gt;
+$ strings bin/a
+/lib64/ld-linux-x86-64.so.2
+libc.so.6
+__isoc99_scanf
+puts
+__cxa_finalize
+strcmp
+__libc_start_main
+_ITM_deregisterTMCloneTable
+__gmon_start__
+_Jv_RegisterClasses
+_ITM_registerTMCloneTable
+GLIBC_2.7
+GLIBC_2.2.5
+=I       
+=*       
+AWAVA
+AUATL
+[]A\A]A^A_
+trance
+PASS
+FAIL
+;*3$&quot;
+GCC: (Debian 6.3.0-18) 6.3.0 20170516
+crtstuff.c
+__JCR_LIST__
+deregister_tm_clones
+__do_global_dtors_aux
+completed.6963
+__do_global_dtors_aux_fini_array_entry
+frame_dummy
+__frame_dummy_init_array_entry
+__FRAME_END__
+__JCR_END__
+__init_array_end
+_DYNAMIC
+__init_array_start
+__GNU_EH_FRAME_HDR
+_GLOBAL_OFFSET_TABLE_
+__libc_csu_fini
+_ITM_deregisterTMCloneTable
+puts@@GLIBC_2.2.5
+_edata
+__libc_start_main@@GLIBC_2.2.5
+__data_start
+strcmp@@GLIBC_2.2.5
+__gmon_start__
+__dso_handle
+_IO_stdin_used
+__libc_csu_init
+__bss_start
+main
+_Jv_RegisterClasses
+__isoc99_scanf@@GLIBC_2.7
+__TMC_END__
+_ITM_registerTMCloneTable
+__cxa_finalize@@GLIBC_2.2.5
+.symtab
+.strtab
+.shstrtab
+.interp
+.note.ABI-tag
+.note.gnu.build-id
+.gnu.hash
+.dynsym
+.dynstr
+.gnu.version
+.gnu.version_r
+.rela.dyn
+.rela.plt
+.init
+.plt.got
+.text
+.fini
+.rodata
+.eh_frame_hdr
+.eh_frame
+.init_array
+.fini_array
+.jcr
+.dynamic
+.got.plt
+.data
+.bss
+.comment
+&lt;/pre&gt;
+
+&lt;p&gt;While this works, it is clearly much more tedious than the method we employed earlier. The beauty of radare2 is that it is smart enough to know which strings to display and which to omit.&lt;/p&gt;
+
+&lt;p&gt;If we want an &lt;i&gt;even more&lt;/i&gt; tedious method, opening the binary in a hex editor, or even just a plain text editor (or better yet, in &lt;code&gt;less&lt;/code&gt;) and simply skim-reading for human-readable words would have worked (this is not for the weak-willed, though).&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;s3&quot;&gt;
+&lt;h2&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;Crackerjack is a work in progess and I am adding new puzzles as I write and test them. I will publish a walkthrough for Puzzle B soon (Puzzle B poses more interesting challenges, but is not out of reach).&lt;/p&gt;
+
+&lt;p&gt;On a more general note, if you are looking for some excellent communities for learning and discussing reverse engineering, consider &lt;a href=&quot;https://reddit.com/r/ReverseEngineering&quot; target=&quot;_blank&quot; title=&quot;Reverse Engineering&quot;&gt;/r/ReverseEngineering&lt;/a&gt; or &lt;a href=&quot;https://reddit.com/r/REGames&quot; target=&quot;_blank&quot; title=&quot;Reverse Engineering Games&quot;&gt;/r/REGames&lt;/a&gt; on Reddit, or the &lt;a href=&quot;https://reverseengineering.stackexchange.com&quot; target=&quot;_blank&quot; title=&quot;Reverse Engineering Stack Exchange&quot;&gt;Reverse Engineering Stack Exchange&lt;/a&gt;.&lt;/p&gt;
+&lt;/section&gt;
+</description>
+        <pubDate>Wed, 07 Feb 2018 00:00:00 +0000</pubDate>
+        <link>https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution/</link>
+        <guid isPermaLink="true">https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution/</guid>
+        
+        
+      </item>
     
       <item>
         <title>Identifying Loops While Reverse Engineering</title>
