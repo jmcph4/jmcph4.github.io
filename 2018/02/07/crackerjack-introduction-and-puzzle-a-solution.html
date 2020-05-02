@@ -1,83 +1,81 @@
-<!DOCTYPE html>
-<html>
-
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1">
-
-    <title>Crackerjack - Introduction and Puzzle A Solution - Jack McPherson</title>
-    <meta name="description" content="As part of my journey into reverse engineering, I decided to create my own set of crackmes called Crackerjack. I will be doing a series of articles detailing...">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://jmcph4.github.io/css/main.css" type="text/css" />
-    <link rel="canonical" href="https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution/">
-    <link rel="alternate" type="application/atom+xml" title="Jack McPherson" href="https://jmcph4.github.io/feed.xml" />
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <!-- Google Analytics -->
-    <script>
-    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', 'UA-112752433-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
-</head>
-
-
-  <body lang="en">
-
-    <header>
-    <div id="masthead">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1>
-                        Jack McPherson
-                    </h1>
+<!doctype html>
+<html lang="en-AU">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Crackerjack - Introduction and Puzzle A Solution | Disciple of Dawn</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://jmcph4.github.io/assets/css/main.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <header>
+            <div id="masthead-container" class="container-fluid">
+                <div class="row no-gutters">
+                    <div class="col">
+                        <!-- Masthead -->
+                        <div id="masthead">
+                            <h1>Disciple of Dawn</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        <!-- Main menu -->
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="collapse navbar-collapse">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://jmcph4.github.io">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://jmcph4.github.io/posts">Posts</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://github.com/" target="_blank">GitHub</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://www.linkedin.com/in/jack-mcpherson-410b2a134" target="_blank">LinkedIn</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-  
-    <div id="main-menu" class="navbar">
+            <hr>
+        </header>
+        
+        <!-- Main content -->
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <nav class="nav">
-                        <ul class="nav navbar-nav">
-                            <li><a href="https://jmcph4.github.io">Home</a><li>
-                            <li><a href="https://jmcph4.github.io/posts">Posts</a></li>
-                            <li><a href="https://github.com/jmcph4?tab=repositories" target="_blank">Projects</a><li>
-                            <li><a href="https://github.com/jmcph4" target="_blank">GitHub</a></li>
-                            <li><a href="https://stackoverflow.com/users/story/8028639">Stack Overflow</a></li>
-                            <li><a href="https://reddit.com/u/jmcph4">Reddit</a></li>
-                            <li><a href="https://www.linkedin.com/in/jack-mcpherson-410b2a134" target="_blank">LinkedIn</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<hr>
 
 
-	<div class="container">
-    <div class="page-content">
-      <div class="row">
-        <div class="col-xs-12">
-          <article class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">Crackerjack - Introduction and Puzzle A Solution</h1>
-    <p class="post-meta">Feb 7, 2018</p>
-  </header>
-  
-    <section id="s1">
+<label for="show">
+    <a class="post-special-link"><span>[BibTeX]</span></a>
+</label>
+<input type=radio id="show" name="group">
+<span class="bibtex-content">
+<pre>
+@online &#123;
+    author=&#123;Jack McPherson&#125;,
+    date=&#123;2018-02-07 00:00:00 +1000&#125;,
+    title=&#123;Crackerjack - Introduction and Puzzle A Solution&#125;,
+    url=&#123;https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html&#125;
+&#125;
+</pre>
+</span>
+
+<a href="https://translate.google.com/translate?sl=auto&tl=en&u=https%3A%2F%2Fjmcph4.github.io%2F2018%2F02%2F07%2Fcrackerjack-introduction-and-puzzle-a-solution.html" target="_blank" class="post-special-link">[Translate]</a>
+
+<a href="https://scholar.google.com/scholar?q=binary analysis+malware analysis+binary exploitation+disassembly+machine code+crackme+cybersecurity+" target="_blank" class="post-special-link">[Related]</a>
+
+<h1>Crackerjack - Introduction and Puzzle A Solution</h1>
+<span class="post-author-byline">by Jack McPherson</span> | <span class="post-datetime">2018-02-07 00:00:00 +1000</span>
+
+<section id="s1">
 <h2>Introduction</h2>
 <p>As part of my journey into reverse engineering, I decided to create my own set of <a href="https://en.wikipedia.org/wiki/Crackme" target="_blank" title="Crackme - Wikipedia">"crackmes"</a> called <a href="https://github.com/jmcph4/crackerjack" target="_blank" title="GitHub - jmcph4/crackerjack: A collection of crackmes">Crackerjack</a>. I will be doing a series of articles detailing solutions to each puzzle, predominantly using radare2 and Unix utilities.</p>
 
@@ -230,30 +228,15 @@ __cxa_finalize@@GLIBC_2.2.5
 </section>
 
 
-</article>
-
         </div>
-      </div>
-    </div>
-	</div>
 
-    <hr>
-<footer class="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-4">
-                <a class="github-button" href="https://github.com/jmcph4" data-style="mega" aria-label="Follow @jmcph4 on GitHub">Follow @jmcph4</a>
-            </div>
-            <div class="col-xs-4">
-                <p class="footer-rss">Subscribe <a href="/feed.xml">via RSS</a></p>
-            </div>
-            <div class="col-xs-4">
-                <p class="footer-copyright">Copyright &copy; Jack McPherson 2015-2018.</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-  </body>
-
+        <!-- Footer -->
+        <footer>
+            <hr>
+            Copyright &copy; Jack McPherson 2020.
+        </footer>
+    </body>
 </html>
+
+
+

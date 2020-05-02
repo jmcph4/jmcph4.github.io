@@ -1,83 +1,81 @@
-<!DOCTYPE html>
-<html>
-
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width initial-scale=1">
-
-    <title>Writing a Simple Fuzzer in Python - Jack McPherson</title>
-    <meta name="description" content="I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In th...">
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://jmcph4.github.io/css/main.css" type="text/css" />
-    <link rel="canonical" href="https://jmcph4.github.io/2018/01/19/writing-a-simple-fuzzer-in-python/">
-    <link rel="alternate" type="application/atom+xml" title="Jack McPherson" href="https://jmcph4.github.io/feed.xml" />
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    
-    <!-- Google Analytics -->
-    <script>
-    window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-    ga('create', 'UA-112752433-1', 'auto');
-    ga('send', 'pageview');
-    </script>
-    <script async src='https://www.google-analytics.com/analytics.js'></script>
-    <!-- End Google Analytics -->
-</head>
-
-
-  <body lang="en">
-
-    <header>
-    <div id="masthead">
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h1>
-                        Jack McPherson
-                    </h1>
+<!doctype html>
+<html lang="en-AU">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Writing a Simple Fuzzer in Python | Disciple of Dawn</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://jmcph4.github.io/assets/css/main.css">
+    </head>
+    <body>
+        <!-- Header -->
+        <header>
+            <div id="masthead-container" class="container-fluid">
+                <div class="row no-gutters">
+                    <div class="col">
+                        <!-- Masthead -->
+                        <div id="masthead">
+                            <h1>Disciple of Dawn</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        <!-- Main menu -->
+                        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                            <div class="collapse navbar-collapse">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://jmcph4.github.io">Home</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://jmcph4.github.io/posts">Posts</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://github.com/" target="_blank">GitHub</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="https://www.linkedin.com/in/jack-mcpherson-410b2a134" target="_blank">LinkedIn</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-  
-    <div id="main-menu" class="navbar">
+            <hr>
+        </header>
+        
+        <!-- Main content -->
         <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <nav class="nav">
-                        <ul class="nav navbar-nav">
-                            <li><a href="https://jmcph4.github.io">Home</a><li>
-                            <li><a href="https://jmcph4.github.io/posts">Posts</a></li>
-                            <li><a href="https://github.com/jmcph4?tab=repositories" target="_blank">Projects</a><li>
-                            <li><a href="https://github.com/jmcph4" target="_blank">GitHub</a></li>
-                            <li><a href="https://stackoverflow.com/users/story/8028639">Stack Overflow</a></li>
-                            <li><a href="https://reddit.com/u/jmcph4">Reddit</a></li>
-                            <li><a href="https://www.linkedin.com/in/jack-mcpherson-410b2a134" target="_blank">LinkedIn</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
-<hr>
 
 
-	<div class="container">
-    <div class="page-content">
-      <div class="row">
-        <div class="col-xs-12">
-          <article class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">Writing a Simple Fuzzer in Python</h1>
-    <p class="post-meta">Jan 19, 2018</p>
-  </header>
-  
-    <p>I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we'll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written.</p>
+<label for="show">
+    <a class="post-special-link"><span>[BibTeX]</span></a>
+</label>
+<input type=radio id="show" name="group">
+<span class="bibtex-content">
+<pre>
+@online &#123;
+    author=&#123;Jack McPherson&#125;,
+    date=&#123;2018-01-19 00:00:00 +1000&#125;,
+    title=&#123;Writing a Simple Fuzzer in Python&#125;,
+    url=&#123;https://jmcph4.github.io/2018/01/19/writing-a-simple-fuzzer-in-python.html&#125;
+&#125;
+</pre>
+</span>
+
+<a href="https://translate.google.com/translate?sl=auto&tl=en&u=https%3A%2F%2Fjmcph4.github.io%2F2018%2F01%2F19%2Fwriting-a-simple-fuzzer-in-python.html" target="_blank" class="post-special-link">[Translate]</a>
+
+<a href="https://scholar.google.com/scholar?q=fuzzing+automated testing+program analysis+dynamic analysis+testing methodologies+" target="_blank" class="post-special-link">[Related]</a>
+
+<h1>Writing a Simple Fuzzer in Python</h1>
+<span class="post-author-byline">by Jack McPherson</span> | <span class="post-datetime">2018-01-19 00:00:00 +1000</span>
+
+<p>I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we'll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written.</p>
 
 <section id="s1">
 <h2>Introduction</h2>
@@ -350,30 +348,15 @@ Bus error
 </section>
 
 
-</article>
-
         </div>
-      </div>
-    </div>
-	</div>
 
-    <hr>
-<footer class="site-footer">
-    <div class="container">
-        <div class="row">
-            <div class="col-xs-4">
-                <a class="github-button" href="https://github.com/jmcph4" data-style="mega" aria-label="Follow @jmcph4 on GitHub">Follow @jmcph4</a>
-            </div>
-            <div class="col-xs-4">
-                <p class="footer-rss">Subscribe <a href="/feed.xml">via RSS</a></p>
-            </div>
-            <div class="col-xs-4">
-                <p class="footer-copyright">Copyright &copy; Jack McPherson 2015-2018.</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-  </body>
-
+        <!-- Footer -->
+        <footer>
+            <hr>
+            Copyright &copy; Jack McPherson 2020.
+        </footer>
+    </body>
 </html>
+
+
+
