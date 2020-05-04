@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Home | Disciple of Dawn</title>
+        <title>Notes on "Learning to Fuzz from Symbolic Execution with Application to Smart Contracts" | Disciple of Dawn</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
@@ -53,50 +53,72 @@
 
 
 
+<label for="show">
+    <a class="post-special-link"><span>[BibTeX]</span></a>
+</label>
+<input type=radio id="show" name="group">
+<span class="bibtex-content">
+<pre>
+@online&#123;notes-on-learning-toMcPherson2018,
+    author=&#123;Jack McPherson&#125;,
+    date=&#123;2018-05-03&#125;,
+    title=&#123;Notes on "Learning to Fuzz from Symbolic Execution with Application to Smart Contracts"&#125;,
+    url=&#123;https://jmcph4.github.io/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html&#125;,
+    urldate=&#123;2020-05-04&#125;,
+&#125;
+</pre>
+</span>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html">Notes on "Learning to Fuzz from Symbolic Execution with Application to Smart Contracts"</a></h2>
-            <p class="post-exerpt"><section id="prelude">
+<a href="https://translate.google.com/translate?sl=auto&tl=en&u=https%3A%2F%2Fjmcph4.github.io%2F2018%2F05%2F03%2Freading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html" target="_blank" class="post-special-link">[Translate]</a>
+
+<a href="https://scholar.google.com/scholar?q=fuzzing+symbolic execution+imitation learning+smart contracts+Ethereum+software testing+machine learning+" target="_blank" class="post-special-link">[Related]</a>
+
+
+
+<h1>Notes on "Learning to Fuzz from Symbolic Execution with Application to Smart Contracts"</h1>
+<span class="post-author-byline">by Jack McPherson</span> | <span class="post-datetime">2018-05-03 00:00:00 +1000</span>
+
+<section id="prelude">
     <p>For some coursework I'm currently undertaking, I've had to read a paper entitled <cite>Learning to Fuzz from Symbolic Execution with Application to Smart Contracts</cite>[<a href="#ref-1">1</a>] in order to prepare a seminar presentation for assessment.</p>
     <p>As such, I've decided to typeset the handwritten notes I took as I read through the entirety of the paper.</p>
-</section></p>
-            <a href="/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html">Read more</a>
-        </div>
-    </div>
+</section>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">Crackerjack - Introduction and Puzzle A Solution</a></h2>
-            <p class="post-exerpt">As part of my journey into reverse engineering, I decided to create my own set of crackmes called Crackerjack. I will be doing a series of articles detailing solutions to each puzzle</p>
-            <a href="/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">Read more</a>
-        </div>
-    </div>
+<section id="overview">
+    <h2>2 - OVERVIEW</h2>
+    <section id="fuzzing-challenges">
+        <h3>2.2 - Challenges of Fuzzing Smart Contracts</h3>
+        <ul>
+            <li>Smart contracts are stateful</li>
+            <li>Each transaction consists of</li>
+            <ol>
+                <li>Contract function (with arguments)</li>
+                <li>Address of caller</li>
+                <li>Gas sent to contract</li>
+            </ol>
+            <li>Statefulness hinders automated testing</li>
+            <li>Often deep states</li>
+            <ul>                
+                <li>Require long sequences of transactions to reach them</li>
+                <ul>
+                    <li>Due to preconditions, etc.</li>
+                </ul>
+                <li>Limits code coverage</li>
+            </ul>
+        </ul>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/02/02/identifying-loops-while-reverse-engineering.html">Identifying Loops While Reverse Engineering</a></h2>
-            <p class="post-exerpt">Often when reverse engineering a binary, it's useful to have some patterns to help identify higher-level code constructs. This post goes through the general structure of various loops in a higher-level language (C) and their corresponding assembly format</p>
-            <a href="/2018/02/02/identifying-loops-while-reverse-engineering.html">Read more</a>
-        </div>
-    </div>
+        <section id="limited-coverage-existing-fuzzers">
+            <h4>Limited Coverage of Existing Fuzzers</h4>
+            <p></p>
+        </section>
+    </section>
+</section>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Writing a Simple Fuzzer in Python</a></h2>
-            <p class="post-exerpt">I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we'll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written</p>
-            <a href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Read more</a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2017/01/14/a-model-for-adts.html">A Model For ADTs</a></h2>
-            <p class="post-exerpt"><p>For the past month or so I have concerned myself with the study of Abstract Data Types (ADTs), particularly the precise, abstract mathematical definition of them. This post reflects the current culmination of my efforts.</p></p>
-            <a href="/2017/01/14/a-model-for-adts.html">Read more</a>
-        </div>
-    </div>
-
+<section id="bibliography">
+    <h2>Bibliography</h2>
+    <ol>
+        <li id="ref-1">J. He, M. Balunovic, N. Ambroladze, P. Tsankov, and M. Vechev, "Learning to Fuzz from Symbolic Execution with Application to Smart Contracts" in <i>Proceedings of the 2019 ACM SIGSAC Conference on Computer Communications Security</i>, ser. CCS' 19, London, United Kingdom: Association for Computing Machinery, 2019, pp. 531-548, ISBN: 9781450367479, DOI: 10.1145/3319535.3363230</li>
+    </ol>
+</section>
 
 
 

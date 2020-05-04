@@ -1,4 +1,44 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jmcph4.github.io/" rel="alternate" type="text/html" /><updated>2020-05-03T15:39:09+10:00</updated><id>https://jmcph4.github.io/feed.xml</id><title type="html">Disciple of Dawn</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Crackerjack - Introduction and Puzzle A Solution</title><link href="https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html" rel="alternate" type="text/html" title="Crackerjack - Introduction and Puzzle A Solution" /><published>2018-02-07T00:00:00+10:00</published><updated>2018-02-07T00:00:00+10:00</updated><id>https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution</id><content type="html" xml:base="https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">&lt;section id=&quot;s1&quot;&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://jmcph4.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jmcph4.github.io/" rel="alternate" type="text/html" /><updated>2020-05-04T19:26:17+10:00</updated><id>https://jmcph4.github.io/feed.xml</id><title type="html">Disciple of Dawn</title><subtitle>Write an awesome description for your new site here. You can edit this line in _config.yml. It will appear in your document head meta (for Google search results) and in your feed.xml site description.</subtitle><entry><title type="html">Notes on “Learning to Fuzz from Symbolic Execution with Application to Smart Contracts”</title><link href="https://jmcph4.github.io/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html" rel="alternate" type="text/html" title="Notes on &quot;Learning to Fuzz from Symbolic Execution with Application to Smart Contracts&quot;" /><published>2018-05-03T00:00:00+10:00</published><updated>2018-05-03T00:00:00+10:00</updated><id>https://jmcph4.github.io/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts</id><content type="html" xml:base="https://jmcph4.github.io/2018/05/03/reading-learning-to-fuzz-from-symbolic-execution-with-application-to-smart-contracts.html">&lt;section id=&quot;prelude&quot;&gt;
+    &lt;p&gt;For some coursework I'm currently undertaking, I've had to read a paper entitled &lt;cite&gt;Learning to Fuzz from Symbolic Execution with Application to Smart Contracts&lt;/cite&gt;[&lt;a href=&quot;#ref-1&quot;&gt;1&lt;/a&gt;] in order to prepare a seminar presentation for assessment.&lt;/p&gt;
+    &lt;p&gt;As such, I've decided to typeset the handwritten notes I took as I read through the entirety of the paper.&lt;/p&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;overview&quot;&gt;
+    &lt;h2&gt;2 - OVERVIEW&lt;/h2&gt;
+    &lt;section id=&quot;fuzzing-challenges&quot;&gt;
+        &lt;h3&gt;2.2 - Challenges of Fuzzing Smart Contracts&lt;/h3&gt;
+        &lt;ul&gt;
+            &lt;li&gt;Smart contracts are stateful&lt;/li&gt;
+            &lt;li&gt;Each transaction consists of&lt;/li&gt;
+            &lt;ol&gt;
+                &lt;li&gt;Contract function (with arguments)&lt;/li&gt;
+                &lt;li&gt;Address of caller&lt;/li&gt;
+                &lt;li&gt;Gas sent to contract&lt;/li&gt;
+            &lt;/ol&gt;
+            &lt;li&gt;Statefulness hinders automated testing&lt;/li&gt;
+            &lt;li&gt;Often deep states&lt;/li&gt;
+            &lt;ul&gt;                
+                &lt;li&gt;Require long sequences of transactions to reach them&lt;/li&gt;
+                &lt;ul&gt;
+                    &lt;li&gt;Due to preconditions, etc.&lt;/li&gt;
+                &lt;/ul&gt;
+                &lt;li&gt;Limits code coverage&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/ul&gt;
+
+        &lt;section id=&quot;limited-coverage-existing-fuzzers&quot;&gt;
+            &lt;h4&gt;Limited Coverage of Existing Fuzzers&lt;/h4&gt;
+            &lt;p&gt;&lt;/p&gt;
+        &lt;/section&gt;
+    &lt;/section&gt;
+&lt;/section&gt;
+
+&lt;section id=&quot;bibliography&quot;&gt;
+    &lt;h2&gt;Bibliography&lt;/h2&gt;
+    &lt;ol&gt;
+        &lt;li id=&quot;ref-1&quot;&gt;J. He, M. Balunovic, N. Ambroladze, P. Tsankov, and M. Vechev, &quot;Learning to Fuzz from Symbolic Execution with Application to Smart Contracts&quot; in &lt;i&gt;Proceedings of the 2019 ACM SIGSAC Conference on Computer Communications Security&lt;/i&gt;, ser. CCS' 19, London, United Kingdom: Association for Computing Machinery, 2019, pp. 531-548, ISBN: 9781450367479, DOI: 10.1145/3319535.3363230&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/section&gt;</content><author><name></name></author><category term="fuzzing" /><category term="symbolic execution" /><category term="imitation learning" /><category term="smart contracts" /><category term="Ethereum" /><category term="software testing" /><category term="machine learning" /><summary type="html">For some coursework I'm currently undertaking, I've had to read a paper entitled Learning to Fuzz from Symbolic Execution with Application to Smart Contracts[1] in order to prepare a seminar presentation for assessment. As such, I've decided to typeset the handwritten notes I took as I read through the entirety of the paper.</summary></entry><entry><title type="html">Crackerjack - Introduction and Puzzle A Solution</title><link href="https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html" rel="alternate" type="text/html" title="Crackerjack - Introduction and Puzzle A Solution" /><published>2018-02-07T00:00:00+10:00</published><updated>2018-02-07T00:00:00+10:00</updated><id>https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution</id><content type="html" xml:base="https://jmcph4.github.io/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">&lt;section id=&quot;s1&quot;&gt;
 &lt;h2&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;As part of my journey into reverse engineering, I decided to create my own set of &lt;a href=&quot;https://en.wikipedia.org/wiki/Crackme&quot; target=&quot;_blank&quot; title=&quot;Crackme - Wikipedia&quot;&gt;&quot;crackmes&quot;&lt;/a&gt; called &lt;a href=&quot;https://github.com/jmcph4/crackerjack&quot; target=&quot;_blank&quot; title=&quot;GitHub - jmcph4/crackerjack: A collection of crackmes&quot;&gt;Crackerjack&lt;/a&gt;. I will be doing a series of articles detailing solutions to each puzzle, predominantly using radare2 and Unix utilities.&lt;/p&gt;
 
