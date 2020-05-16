@@ -56,6 +56,62 @@
 
     <div class="row">
         <div class="col-xs-12">
+            <h2><a class="post-link" href="/2020/05/16/pre-print-saturday-2.html">Pre-Print Saturday #2: 16 May 2020</a></h2>
+            <p class="post-exerpt"><ul>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06093" target="_blank"><cite>Stabilizing Congestion in Decentralized Record-Keepers</cite></a><a href="https://semion.io/doc/stabilizing-congestion-in-decentralized-record-keepers" target="_blank">[Semion.io]</a><br>
+        <p>The authors present a proposal for a distributed ledger system and accompanying payment system that leverages recent advancements in both PoW consensus and formal verification. The authors also present a formal economic model of their protocol design. Of particular interest is that their proposed system reaches stability in the absence of block rewards - relying solely on transaction fees to maintain consensus.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.05521" target="_blank"><cite>A Difficulty in Controlling Blockchain Mining Costs via Cryptopuzzle Difficulty</cite></a><a href="https://semion.io/doc/a-difficulty-in-controlling-blockchain-mining-costs-via-cryptopuzzle-difficulty" target="_blank">[Semion.io]</a><br>
+        <p>The authors model PoW mining as an all-pay auction and prove several properties of the auction's allocation function.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06580" target="_blank"><cite>Practical Hash-based Anonymity for MAC Addresses</cite></a><a href="https://semion.io/doc/practical-hash-based-anonymity-for-mac-addresses" target="_blank">[Semion.io]</a><br>
+        <p>The authors present a viable method for anonymising MAC addresses through hashing. They improve on previous work using a hash-based strategy by using more expensive hash functions and ensuring \(k\)-bit anonymity.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06665" target="_blank"><cite>Scaling Blockchains Without Giving up Decentralization and Security</cite></a><a href="https://semion.io/doc/scaling-blockchains-without-giving-up-decentralization-and-security" target="_blank">[Semion.io]</a><br>
+        <p>The authors present what they consider to be a blockchain design that escapes the so-called blockchain trilemma by providing an arbitrarily scalable blockchain without weakening security nor decentralisation.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06610" target="_blank"><cite>Pump and Dumps in the Bitcoin Era: Real Time Detection of Cryptocurrency Market Manipulations</cite></a><a href="https://semion.io/doc/pump-and-dumps-in-the-bitcoin-era-real-time-detection-of-cryptocurrency-market-manipulations" target="_blank">[Semion.io]</a><br>
+        <p>The authors present their research into cryptocurrency market manipulation (albeit in centralised crypto-fiat exchanges). They attribute the susceptibility of cryptocurrency to pump and dumps to the often low liquidity in certain more obscure cryptocurrencies. One finding of note is the operation of a large pump and dump community operating on Binance.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06227" target="_blank"><cite>eThor: Practical and Provably Sound Static Analysis of Ethereum Smart Contracts</cite></a><a href="https://semion.io/doc/ethor-practical-and-provably-sound-static-analysis-of-ethereum-smart-contracts" target="_blank">[Semion.io]</a><br>
+    <p>The authors present <i>eThor</i>, a provably sound static analyser for Ethereum smart contracts.</p>
+    <p>This paper is of particular interest as it provides another advancement in the first pillar of smart contract testing: static analysis. I've written about dynamic analysis tools (mainly fuzzers) before, and previous pre-prints in the series have discussed formal verification too.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06026" target="_blank"><cite>Enabling Deletion in Append-Only Blockchains (Short Summary / Work in Progress)</cite></a><a href="https://semion.io/doc/enabling-deletion-in-append-only-blockchains-short-summary-work-in-progress" target="_blank">[Semion.io]</a><br>
+    <p>The authors describe a method of of <i>deleting</i> previously confirmed blocks in a blockchain. While this seems to be entirely against the point of blockchains in the first place, but the authors provide a consensus-driven method for deleting blocks by way of context isolation.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.05996" target="_blank"><cite>Towards Memory Safe Python Enclave for Security Sensitive Computation</cite></a><a href="https://semion.io/doc/towards-memory-safe-python-enclave-for-security-sensitive-computation" target="_blank">[Semion.io]</a><br>
+    <p>The authors extend advancements in Intel SGX-based memory enclaves implemented in Rust to Python. They cite the existing prevalance of Python in fields such as data science as a reason for such an extension.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06356" target="_blank"><cite>Impact of Geo-distribution and Mining Pools on Blockchains: A Study of Ethereum</cite></a><a href="https://semion.io/doc/impact-of-geo-distribution-and-mining-pools-on-blockchains-a-study-of-ethereum" target="_blank">[Semion.io]</a><br>
+    <p>The authors present their findings from a month-long study into Ethereum network structure. Their study used geographically dispersed observation points to observe the geographical distribution of Ethereum and the impact of mining pools on the network.</p>
+    <p>Personally, I think their study could have been more geographically dispersed, but I assume there were resource constraints on the authors precluding this.</p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.05944" target="_blank"><cite>CapablePtrs: Securely Compiling Partial Programs using the Pointers-as-Capabilities Principle</cite></a><a href="https://semion.io/doc/capableptrs-securely-compiling-partial-programs-using-the-pointers-as-capabilities-principle" target="_blank">[Semion.io]</a><br>
+    <p>The authors present a C-to-CHERI compiler of their development, which implements the Pointers-as-Capabilities model. One result is that their compiler can provide strong security guarantees for an individual compilation unit - even if it is later linked against buggy or malicious code.</p>
+    <p></p>
+    </li>
+    <li>
+        <a href="https://arxiv.org/abs/2005.06881" target="_blank"><cite>Identifying Bugs in Make and JVM-Oriented Builds</cite></a><a href="https://semion.io/doc/identifying-bugs-in-make-and-jvm-oriented-builds" target="_blank">[Semion.io]</a><br>
+    <p>The authors present a tool called <i>buildfs</i> which can reason about Make- and JVM-based build systems by interpreting their specification from the build scripts themselves and then analysing file system activity to see how the actual operation of the build may deviate from its specification.</p>
+    </li>
+</ul></p>
+            <a href="/2020/05/16/pre-print-saturday-2.html">Read more</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
             <h2><a class="post-link" href="/2020/05/09/pre-print-saturday-1.html">Pre-Print Saturday #1: 9 May 2020</a></h2>
             <p class="post-exerpt"><ul>
     <li>
@@ -112,14 +168,6 @@
             <h2><a class="post-link" href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Writing a Simple Fuzzer in Python</a></h2>
             <p class="post-exerpt">I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we'll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written</p>
             <a href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Read more</a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2017/01/14/a-model-for-adts.html">A Model For ADTs</a></h2>
-            <p class="post-exerpt"><p>For the past month or so I have concerned myself with the study of Abstract Data Types (ADTs), particularly the precise, abstract mathematical definition of them. This post reflects the current culmination of my efforts.</p></p>
-            <a href="/2017/01/14/a-model-for-adts.html">Read more</a>
         </div>
     </div>
 

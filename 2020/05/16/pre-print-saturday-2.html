@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Posts | Disciple of Dawn</title>
+        <title>Pre-Print Saturday #2: 16 May 2020 | Disciple of Dawn</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
         <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville&display=swap" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Lato&display=swap" rel="stylesheet">
@@ -53,15 +53,32 @@
 
 
 
-<div class="row">
-    <h1>Posts</h1>
-</div>
+<label for="show">
+    <a class="post-special-link"><span>[BibTeX]</span></a>
+</label>
+<input type=radio id="show" name="group">
+<span class="bibtex-content">
+<pre>
+@online&#123;pre-print-saturday-2McPherson2020,
+    author=&#123;Jack McPherson&#125;,
+    date=&#123;2020-05-16&#125;,
+    title=&#123;Pre-Print Saturday #2: 16 May 2020&#125;,
+    url=&#123;https://jmcph4.github.io/2020/05/16/pre-print-saturday-2.html&#125;,
+    urldate=&#123;2020-05-16&#125;,
+&#125;
+</pre>
+</span>
+
+<a href="https://translate.google.com/translate?sl=auto&tl=en&u=https%3A%2F%2Fjmcph4.github.io%2F2020%2F05%2F16%2Fpre-print-saturday-2.html" target="_blank" class="post-special-link">[Translate]</a>
+
+<a href="https://scholar.google.com/scholar?q=proof-of-work+consensus+congestion control+all-pay auctions+hashing+MAC addresses+anonymity+k-anonymity+scalability+scalable blockchain+pump and dump+market manipulation+secure enclave+memory safety+Intel SGX+static analysis+Ethereum+smart contracts+mining pools+capabilities+" target="_blank" class="post-special-link">[Related]</a>
 
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2020/05/16/pre-print-saturday-2.html">Pre-Print Saturday #2: 16 May 2020</a></h2>
-            <p class="post-exerpt"><ul>
+
+<h1>Pre-Print Saturday #2: 16 May 2020</h1>
+<span class="post-author-byline">by Jack McPherson</span> | <span class="post-datetime">2020-05-16 10:45:00 +1000</span>
+
+<ul>
     <li>
         <a href="https://arxiv.org/abs/2005.06093" target="_blank"><cite>Stabilizing Congestion in Decentralized Record-Keepers</cite></a><a href="https://semion.io/doc/stabilizing-congestion-in-decentralized-record-keepers" target="_blank">[Semion.io]</a><br>
         <p>The authors present a proposal for a distributed ledger system and accompanying payment system that leverages recent advancements in both PoW consensus and formal verification. The authors also present a formal economic model of their protocol design. Of particular interest is that their proposed system reaches stability in the absence of block rewards - relying solely on transaction fees to maintain consensus.</p>
@@ -109,79 +126,41 @@
         <a href="https://arxiv.org/abs/2005.06881" target="_blank"><cite>Identifying Bugs in Make and JVM-Oriented Builds</cite></a><a href="https://semion.io/doc/identifying-bugs-in-make-and-jvm-oriented-builds" target="_blank">[Semion.io]</a><br>
     <p>The authors present a tool called <i>buildfs</i> which can reason about Make- and JVM-based build systems by interpreting their specification from the build scripts themselves and then analysing file system activity to see how the actual operation of the build may deviate from its specification.</p>
     </li>
-</ul></p>
-            <a href="/2020/05/16/pre-print-saturday-2.html">Read more</a>
-        </div>
-    </div>
+</ul>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2020/05/09/pre-print-saturday-1.html">Pre-Print Saturday #1: 9 May 2020</a></h2>
-            <p class="post-exerpt"><ul>
-    <li>
-        <a href="https://arxiv.org/abs/2005.03564" target="_blank"><cite>QuickSync: A Quickly Synchronizing PoS-Based Blockchain Protocol</cite></a><a href="https://semion.io/doc/quicksync-a-quickly-synchronizing-pos-based-blockchain-protocol" target="_blank">[Semion.io]</a><br>
-        <p>The authors present <i>QuickSync</i>, a Proof-of-Stake blockchain consensus protocol based on Ouroboros[<a href="#ref-6">6</a>]. The authors claim Byzantine resistance against an adversary with up to 50% stake and also performance improvements. The paper also contains proofs for both the liveness and persistence of this protocol.</p>
-    </li>
-    <li>
-        <a href="https://arxiv.org/abs/2005.03199" target="_blank"><cite>Enabling Cross-chain Transactions: A Decentralized Cryptocurrency Exchange Protocol</cite></a><a href="https://semion.io/doc/enabling-cross-chain-transactions-a-decentralized-cryptocurrency-exchange-protocol" target="_blank">[Semion.io]</a><br>
-        <p>The authors propose a decentralised <i>cross</i>-cryptocurrency exchange, motivated by trading Bitcoins for other cryptocurrencies. The authors implement a prototype as a DApp running on an Ethereum testnet.</p>
-        <p>This paper is particularly interesting to me for two main reasons. Firstly, given my current research - both personal and coursework-related - into DExes and other DeFi platforms. Secondly, my interest in projects such as <i>tBTC</i>[<a href="#ref-7">7</a>]</p>
-    </li>
-    <li>
-        <a href="https://arxiv.org/abs/2004.09252" target="_blank"><cite>MemShield: GPU-assisted software memory encryption</cite></a><a href="https://semion.io/doc/memshield-gpu-assisted-software-memory-encryption" target="_blank">[Semion.io]</a><br>
-        <p>The authors propose <i>MemShield</i>, a framework for transparently encrypting primary memory to resist cold boot attacks. <i>MemShield</i> is implemented as a C library that interacts with <code>userfaultfd</code> to monitor for page requests from userspace. This system allows page-level granularity for memory protection.</p>
-        <p>Cold boot attacks have always fascinated me, so mitigations against them are of particular interest as well. I'm impressed by both the granularity and compatibility of this project: <i>no changes to existing applications are required</i>.</p>
-    </li>
-    <li>
-        <a href="https://arxiv.org/abs/2005.01261" target="_blank"><cite>Formal Verification of Solidity contracts in Event-B</cite></a><a href="https://semion.io/doc/formal-verification-of-solidity-contracts-in-event-b" target="_blank">[Semion.io]</a><br>
-        <p>The authors define a subset of Solidity which can then be translated into Event-B - a modelling framework of which I have never heard of until discovering this paper. The authors assert that this greatly helps in the formal verification of Ethereum smart contracts.</p>
-        <p>Recent coursework that I'm undertaking has required me to study different testing methodologies for Ethereum smart contracts. So far, this has only involved two categories: symbolic execution and fuzzing. This paper expands on the formal verification route - a category which I haven't covered in depth yet.</p>
-    </li>
-    <li>
-        <a href="https://arxiv.org/abs/2005.02135" target="_blank"><cite>Human Factors in Biocybersecurity Wargames</cite></a><a href="https://semion.io/doc/human-factors-in-biocybersecurity-wargames" target="_blank">[Semion.io]</a><br>
-        <p>Admittedly, I included this simply due to the spectacular title. Doesn't it just sound cool?</p>
-    </li>
-    <li>
-        <a href="https://arxiv.org/abs/2005.01865" target="_blank"><cite>JaxNet: Scalable Blockchain Network</cite></a><a href="https://semion.io/doc/jaxnet-scalable-blockchain-network" target="_blank">[Semion.io]</a><br>
-        <p>The authors propose a novel design for a scalable, decentralised Proof-of-Work blockchain, called <i>JaxNet</i>. Their design uses a network of parallel chains that rewards miners for their computational effort in maintaining the network.</p>
-        <p>This problem obviously garners an incredible amount of attention - both in academia and industry. Any new publications on the matter seem worthy of a mention.</p>
-    </li>
-</ul></p>
-            <a href="/2020/05/09/pre-print-saturday-1.html">Read more</a>
-        </div>
-    </div>
+<section id="biliography">
+    <h2>Bibliography</h2>
+    <ol>
+        <li id="ref-1">A. Kattis and F. Trottner, <i>Stabilizing Congestion in Decentralized Record-Keepers</i>, 2020</li>
+        <li id="ref-2">V. S. S. Nadendla and L. R. Varshney, <i>A Difficulty in Controlling Blockchain Mining Costs via Cryptopuzzle Difficulty</i>, 2020</li>
+        <li id="ref-3">J. Ali and V. Dyo, <i>Practical Hash-based Anonymity for MAC Addresses</i>, 2020</li>
+        <li id="ref-4">G. Del Monte, D. Pennino and M. Pizzonia, <i>Scaling Blockchains Without Giving up Decentralization and Security</i>, 2020</li>
+        <li id="ref-5">M. La Morgia, A. Mei, F. Sassi and J. Stefa, <i>Pump and Dumps in the Bitcoin Era: Real Time Detection of Cryptocurrency Market Manipulations</i>, 2020</li>
+        <li id="ref-6">C. Schneidewind, I. Grishchenko, M. Scherer and M. Maffei, <i>eThor: Practical and Provably Sound Static Analysis of Ethereum Smart Contracts</i>, 2020</li>
+        <li id="ref-7">M. Kuperberg, <i>Enabling Deletion in Append-Only Blockchains (Short Summary / Work in Progress)</i>, 2020</li>
+        <li id="ref-8">H. Wang, M. Sun, Q. Feng, P. Wang, T. Li and Y. Ding, <i>Towards Memory Safe Python Enclave for Security Sensitive Computation</i>, 2020</li>
+        <li id="ref-9">P. Silva, D. Vavřička, J. Barreto and M. Matos, <i>Impact of Geo-distribution and Mining Pools on Blockchains: A Study of Ethereum</i>, 2020</li>
+        <li id="ref-10">A. El-Korashy, S. Tsampas, M. Patrignani, D. Devriese, D. Garg and F. Piessens, <i>CapablePtrs: Securely Compiling Partial Programs using the Pointers-as-Capabilities Principle</i>, 2020</li>
+        <li id="ref-11">T. Sotiropoulos, S. Chaliasos, D. Mitropoulos and D. Spinellis, <i>Identifying Bugs in Make and JVM-Oriented Builds</i>, 2020</li>
+    </ol>
+</section>
 
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">Crackerjack - Introduction and Puzzle A Solution</a></h2>
-            <p class="post-exerpt">As part of my journey into reverse engineering, I decided to create my own set of crackmes called Crackerjack. I will be doing a series of articles detailing solutions to each puzzle</p>
-            <a href="/2018/02/07/crackerjack-introduction-and-puzzle-a-solution.html">Read more</a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/02/02/identifying-loops-while-reverse-engineering.html">Identifying Loops While Reverse Engineering</a></h2>
-            <p class="post-exerpt">Often when reverse engineering a binary, it's useful to have some patterns to help identify higher-level code constructs. This post goes through the general structure of various loops in a higher-level language (C) and their corresponding assembly format</p>
-            <a href="/2018/02/02/identifying-loops-while-reverse-engineering.html">Read more</a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Writing a Simple Fuzzer in Python</a></h2>
-            <p class="post-exerpt">I have had an interest in fuzzing for quite some time now, and had decided that it was time to start writing some of my own (very basic) fuzzing tools. In this post, we'll step through some of the basic things we might expect from a fuzzer and how we might achieve them using some of the code I have written</p>
-            <a href="/2018/01/19/writing-a-simple-fuzzer-in-python.html">Read more</a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <h2><a class="post-link" href="/2017/01/14/a-model-for-adts.html">A Model For ADTs</a></h2>
-            <p class="post-exerpt"><p>For the past month or so I have concerned myself with the study of Abstract Data Types (ADTs), particularly the precise, abstract mathematical definition of them. This post reflects the current culmination of my efforts.</p></p>
-            <a href="/2017/01/14/a-model-for-adts.html">Read more</a>
-        </div>
-    </div>
+<section id="about-pre-print-saturdays">
+    <h2>About <i>Pre-Print Saturday</i></h2>
+        <section id="about-what">
+            <h3>What is this?</h3>
+            <p><i>Pre-Print Saturday</i> is a series of posts I publish every Saturday. They summarise the previous week's arXiv submissions that I find interesting.</p>
+        </section>
+        
+        <section id="about-why">
+            <h3>Why do this?</h3>
+            <ol>
+                <li>To keep me up-to-date with current literature</li>
+                <li>To provide an organised way of recording and documenting this literature</li>
+                <li>To provide a way for friends, collegues, and the public who may share my interests to remain up-to-date in a less labour-intensive way</li>
+            </ol>
+        </section>
+</section>
 
 
 
